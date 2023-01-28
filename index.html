@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Simple Testing</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div>
+            Server Uri: <input type="text" id="uri" value="localhost" />
+            Server Port: <input type="text" id="port" value="9999" />
+            <!-- <button type="button" onclick="connect()">Connect to server</button> -->
+        </div>
+        <hr />
+        <div>
+            <button type="button" onclick="generateUniqueKey()">Generate Unique Key</button>
+        </div>
+        <hr />
+        <div>
+            Unique Key (url: /send-unique-key): <input type="text" id="unique-key" /> <button type="button" onclick="sendUniqueKey()">Send Unique Key</button>
+        </div>
+        <div>
+            Base64 Login Key (url: /base64-login-key): <input type="text" id="base64-login-key" style="width: 800px" /> <button type="button" onclick="sendBase64LoginKey()">Send Base64 Login Key</button>
+        </div>
+        <hr />
+        <div>
+            Response Message: <span id="message" style="color: blue">No Response</span>
+        </div>
+    </body>
+    <script>
+        const uri = document.getElementById(`uri`).value
+        const port = parseInt(document.getElementById(`port`).value)
+
+        const serverUri = `http://${uri}:${port}`
+
+        // function connect() {
+        //     console.log('connecting...')
+        // }
+
+        function generateUniqueKey() {
+            const key = parseInt(Math.random() * 100)
+            document.getElementById('unique-key').value = key
+        }
+
+        function sendUniqueKey() {
+            const key = document.getElementById('unique-key').value
+
+            axios.post(`${serverUri}/send-unique-key`, { key }).then(res => {
+                document.getElementById('base64-login-key').value = res.data
+            })
+        }
+
+        function sendBase64LoginKey() {
+            const key = document.getElementById('base64-login-key').value
+
+            axios.post(`${serverUri}/send-login-key`, { key }).then(res => {
+                document.getElementById('message').innerHTML = res.data
+            })
+        }
+    </script>
+</html>
